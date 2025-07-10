@@ -83,7 +83,8 @@ dist
 
 # Gatsby files
 .cache/
-public
+# Ignore client build outputs but allow server/public
+client/public
 
 # Storybook build outputs
 .out
