@@ -4,6 +4,8 @@
 
     let lessons = "0 / 0";
     let courses = "0 / 0";
+    let hours = "0";
+    let daysRemaining = "0";
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
@@ -39,6 +41,7 @@
             const lessonsTotal = Number(p.lessons_total) || 0;
             const coursesCompleted = Number(p.courses_completed) || 0;
             const coursesTotal = Number(p.courses_total) || 0;
+            const hoursStudied = Number(p.hours_studied) || 0;
 
             // Confetti from left and right if incremented
             if (lessonsCompleted > lastLessonsCompleted) {
@@ -52,6 +55,22 @@
 
             lessons = `${lessonsCompleted} / ${lessonsTotal}`;
             courses = `${coursesCompleted} / ${coursesTotal}`;
+            hours = `${hoursStudied}`;
+
+            // Calculate days remaining based on lessons progress and hours studied
+            // Assumption: Each lesson takes a certain amount of time, and we study 6 hours per day
+            const remainingLessons = lessonsTotal - lessonsCompleted;
+            let estimatedDays = 0;
+
+            if (remainingLessons > 0 && lessonsCompleted > 0) {
+                // Calculate hours per lesson based on current progress
+                const hoursPerLesson = hoursStudied / lessonsCompleted;
+                const hoursRemaining = remainingLessons * hoursPerLesson;
+                estimatedDays = Math.ceil(hoursRemaining / 6); // 6 hours per day
+            }
+
+            daysRemaining = `${estimatedDays}`;
+
             lessonsProgress =
                 lessonsTotal > 0 ? (lessonsCompleted / lessonsTotal) * 100 : 0;
             lastLessonsCompleted = lessonsCompleted;
@@ -67,13 +86,25 @@
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Lessons: {lessons}
+                Lessons completed: {lessons}
             </div>
             <div
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Courses: {courses}
+                Courses completed: {courses}
+            </div>
+            <div
+                class="card"
+                style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+            >
+                Hours studied: {hours}
+            </div>
+            <div
+                class="card"
+                style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+            >
+                Estimated days left: {daysRemaining}
             </div>
         </div>
         <div class="progress-bar">
@@ -99,6 +130,7 @@
     .container {
         display: flex;
         gap: 1rem;
+        flex-wrap: wrap;
     }
     .card {
         background-blend-mode: overlay;
@@ -108,6 +140,8 @@
         color: #cad6e3;
         padding: 1rem;
         border: 1px solid #cad6e3;
+        flex: 1;
+        min-width: 120px;
     }
     .progress-bar {
         width: 90%;

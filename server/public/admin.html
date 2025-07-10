@@ -1,173 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Overlay Admin</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background: #1e1e1e;
+                color: white;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                padding: 0.5rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                gap: 1rem;
+                max-width: 300px;
+                margin: 0 auto;
+            }
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Overlay Admin</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background: #1e1e1e;
-      color: white;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      gap: 1rem;
-      max-width: 300px;
-      margin: 0 auto;
-    }
+            h1 {
+                text-align: center;
+                color: white;
+                margin-bottom: 1.5rem;
+            }
 
-    h1 {
-      text-align: center;
-      color: white;
-      margin-bottom: 1.5rem;
-    }
+            .input-group {
+                display: flex;
+                width: 100%;
+                height: 2.25rem;
+                flex-wrap: nowrap;
+                gap: 0.5rem;
+                align-items: center;
+            }
 
-    .input-group {
-      display: flex;
-      width: 100%;
-      height: 2.25rem;
-      flex-wrap: nowrap;
-      gap: .5rem;
-      align-items: center;
-    }
+            input[type="text"] {
+                flex-grow: 1;
+                padding: 0.25rem;
+                border: 1px solid #333;
+                border-radius: 4px;
+                height: 2.25rem;
+                background-color: #333;
+                color: white;
+                font-size: 1rem;
+                box-sizing: border-box;
+                min-width: 0; /* Allow input to shrink */
+            }
 
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 0.25rem;
-      border: 1px solid #333;
-      border-radius: 4px;
-      height: 2.25rem;
-      background-color: #333;
-      color: white;
-      font-size: 1rem;
-      box-sizing: border-box;
-      min-width: 0; /* Allow input to shrink */
-    }
+            input[type="text"]::placeholder {
+                color: #bbb;
+            }
 
-    input[type="text"]::placeholder {
-      color: #bbb;
-    }
+            .input-group button {
+                padding: 0.5rem;
+                height: 100%;
+                min-width: 2.25rem;
+                border: none;
+                border-radius: 4px;
+                background-color: #4caf50;
+                color: white;
+                font-size: 0.7rem;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                flex-shrink: 0;
+            }
 
-    .input-group button {
-      padding: .5rem;
-      height: 100%;
-      min-width: 2.25rem;
-      border: none;
-      border-radius: 4px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: .7rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      flex-shrink: 0;
-    }
+            .input-group .decrement-button {
+                background-color: #f44336;
+            }
 
-    
+            .input-group .decrement-button:hover {
+                background-color: #da190b;
+            }
 
-    .input-group .decrement-button {
-      background-color: #f44336;
-    }
+            .input-group .decrement-button:active {
+                background-color: #b0160b;
+            }
 
-    .input-group .decrement-button:hover {
-      background-color: #da190b;
-    }
+            #sendAllButton {
+                width: 100%;
+                background-color: #008cba;
+                padding: 0.75rem 1.25rem;
+                border: none;
+                border-radius: 4px;
+                color: white;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
 
-    .input-group .decrement-button:active {
-      background-color: #b0160b;
-    }
+            #sendAllButton:hover {
+                background-color: #007b9e;
+            }
 
-    #sendAllButton {
-      width: 100%;
-      background-color: #008CBA;
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-radius: 4px;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+            #sendAllButton:active {
+                background-color: #006a8d;
+            }
+        </style>
+    </head>
 
-    #sendAllButton:hover {
-      background-color: #007B9E;
-    }
+    <body>
+        <h1>Overlay Controls</h1>
+        <div class="input-group">
+            <button
+                class="decrement-button"
+                onclick="updateValue('lessons_completed', -1)"
+            >
+                -1
+            </button>
+            <input
+                type="text"
+                id="lessons_completed"
+                placeholder="Lessons completed"
+            />
+            <button onclick="updateValue('lessons_completed', 1)">+1</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="lessons_total" placeholder="Lessons total" />
+        </div>
+        <div class="separator"></div>
+        <div class="input-group">
+            <button
+                class="decrement-button"
+                onclick="updateValue('courses_completed', -1)"
+            >
+                -1
+            </button>
+            <input
+                type="text"
+                id="courses_completed"
+                placeholder="Courses completed"
+            />
+            <button onclick="updateValue('courses_completed', 1)">+1</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="courses_total" placeholder="Courses total" />
+        </div>
+        <div class="separator"></div>
+        <div class="input-group">
+            <button
+                class="decrement-button"
+                onclick="updateValue('hours_studied', -1)"
+            >
+                -1
+            </button>
+            <input type="text" id="hours_studied" placeholder="Hours studied" />
+            <button onclick="updateValue('hours_studied', 1)">+1</button>
+        </div>
+        <div class="separator"></div>
+        <button id="sendAllButton" onclick="sendAll()">Send Progress</button>
 
-    #sendAllButton:active {
-      background-color: #006A8D;
-    }
-  </style>
-</head>
+        <script>
+            document.addEventListener("DOMContentLoaded", loadProgress);
 
-<body>
-  <h1>Overlay Controls</h1>
-  <div class="input-group">
-    <button class="decrement-button" onclick="updateValue('lessons_completed', -1)">-1</button>
-    <input type="text" id="lessons_completed" placeholder="Lessons completed" />
-    <button onclick="updateValue('lessons_completed', 1)">+1</button>
-  </div>
-  <div class="input-group">
-    <input type="text" id="lessons_total" placeholder="Lessons total" />
-  </div>
-  <div class="separator"></div>
-  <div class="input-group">
-    <button class="decrement-button" onclick="updateValue('courses_completed', -1)">-1</button>
-    <input type="text" id="courses_completed" placeholder="Courses completed" />
-    <button onclick="updateValue('courses_completed', 1)">+1</button>
-  </div>
-  <div class="input-group">
-    <input type="text" id="courses_total" placeholder="Courses total" />
-  </div>
-  <div class="separator"></div>
-  <button id="sendAllButton" onclick="sendAll()">Send Progress</button>
+            async function send(key, value) {
+                if (value === "") return;
+                await fetch("/progress", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ key, value }),
+                });
+            }
 
-  <script>
-    document.addEventListener("DOMContentLoaded", loadProgress);
+            async function updateValue(key, delta) {
+                await fetch("/update", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ key, delta }),
+                });
+                await loadProgress();
+            }
 
-    async function send(key, value) {
-      if (value === "") return;
-      await fetch('/progress', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key, value })
-      });
-    }
+            async function sendAll() {
+                await send(
+                    "lessons_completed",
+                    document.getElementById("lessons_completed").value,
+                );
+                await send(
+                    "lessons_total",
+                    document.getElementById("lessons_total").value,
+                );
+                await send(
+                    "courses_completed",
+                    document.getElementById("courses_completed").value,
+                );
+                await send(
+                    "courses_total",
+                    document.getElementById("courses_total").value,
+                );
+                await send(
+                    "hours_studied",
+                    document.getElementById("hours_studied").value,
+                );
+            }
 
-    async function updateValue(key, delta) {
-      await fetch('/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key, delta })
-      });
-      await loadProgress();
-    }
+            async function loadProgress() {
+                const res = await fetch("/progress");
+                const data = await res.json();
+                document.getElementById("lessons_completed").value =
+                    data.lessons_completed || "";
+                document.getElementById("lessons_total").value =
+                    data.lessons_total || "";
+                document.getElementById("courses_completed").value =
+                    data.courses_completed || "";
+                document.getElementById("courses_total").value =
+                    data.courses_total || "";
+                document.getElementById("hours_studied").value =
+                    data.hours_studied || "";
+            }
 
-    async function sendAll() {
-      await send('lessons_completed', document.getElementById('lessons_completed').value);
-      await send('lessons_total', document.getElementById('lessons_total').value);
-      await send('courses_completed', document.getElementById('courses_completed').value);
-      await send('courses_total', document.getElementById('courses_total').value);
-    }
-
-    async function loadProgress() {
-      const res = await fetch('/progress');
-      const data = await res.json();
-      document.getElementById('lessons_completed').value = data.lessons_completed || '';
-      document.getElementById('lessons_total').value = data.lessons_total || '';
-      document.getElementById('courses_completed').value = data.courses_completed || '';
-      document.getElementById('courses_total').value = data.courses_total || '';
-    }
-
-    loadProgress();
-  </script>
-</body>
-
+            loadProgress();
+        </script>
+    </body>
 </html>
