@@ -162,13 +162,17 @@
         flex-wrap: wrap;
     }
     .title-card {
-        max-width: 50%;
+        flex: 0 !important;
+        white-space: nowrap;
+        max-width: 80%;
+        min-width: unset !important;
+        width: fit-content;
         margin: 0 auto;
         text-align: center;
         font-weight: semibold;
         position: relative;
         color: #d7dee6;
-        font-size: 2.5rem;
+        font-size: 2rem;
         margin-bottom: 1rem;
         border: 3px solid #c18500 !important;
         background-color: #2a1c0c !important;
