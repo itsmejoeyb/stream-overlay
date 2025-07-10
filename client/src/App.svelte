@@ -1,6 +1,8 @@
 <script>
     import confetti from "canvas-confetti";
     import bg from "./assets/maptexture2.webp";
+    import buttonBg from "./assets/texture_crack_base.png";
+    import texture from "./assets/texture_paper.png";
 
     let lessons = "0 / 0";
     let courses = "0 / 0";
@@ -88,8 +90,14 @@
             <div class="container">
                 <div
                     class="card title-card"
-                    style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+                    style="background-image: url('{texture}'), url('{buttonBg}'), radial-gradient(
+                        88.86% 132.66% at 50% 92.32%,
+                        transparent 0,
+                        transparent 30%,
+                        #000 100%
+                    );"
                 >
+                    <span class="sub-text">Current course:</span>
                     {courseTitle}
                 </div>
             </div>
@@ -150,8 +158,18 @@
         margin: 0 auto;
         text-align: center;
         font-weight: semibold;
+        position: relative;
+        color: #d7dee6;
         font-size: 2.5rem;
         margin-bottom: 1rem;
+        border: 3px solid #c18500 !important;
+        background-color: #2a1c0c !important;
+    }
+    .sub-text {
+        position: absolute;
+        top: 4px;
+        left: 10px;
+        font-size: 0.75rem;
     }
     .card {
         background-blend-mode: overlay;
@@ -163,13 +181,6 @@
         border: 1px solid #cad6e3;
         flex: 1;
         min-width: 120px;
-    }
-    .course-title {
-        text-align: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        color: #e7b95f;
     }
     .progress-bar {
         width: 90%;
@@ -183,7 +194,7 @@
     .progress {
         width: 0;
         height: 100%;
-        background-color: #e7b95f;
+        background-color: #c18500;
         transition: width 0.3s ease;
     }
 </style>
