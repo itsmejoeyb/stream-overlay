@@ -7,7 +7,7 @@
     let lessons = "0 / 0";
     let courses = "0 / 0";
     let hours = "0";
-    let daysRemaining = "0";
+    let daysRemaining = "Too many...";
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
@@ -125,11 +125,19 @@
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Estimated days left: ~{daysRemaining}
+                Estimated days left: {Number(daysRemaining) > 0
+                    ? daysRemaining
+                    : "Too many..."}
             </div>
         </div>
-        <div class="progress-bar">
-            <div class="progress" style="width: {lessonsProgress}%"></div>
+        <div
+            class="card progress-card"
+            style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+        >
+            <div>Total progress:</div>
+            <div class="progress-bar">
+                <div class="progress" style="width: {lessonsProgress}%"></div>
+            </div>
         </div>
     </div>
 </main>
@@ -182,14 +190,19 @@
         flex: 1;
         min-width: 120px;
     }
+    .progress-card {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
     .progress-bar {
-        width: 90%;
+        flex: 1;
         height: 10px;
         margin: 0 auto;
         background-color: #444;
         border-radius: 5px;
         overflow: hidden;
-        margin-top: 1rem;
     }
     .progress {
         width: 0;
