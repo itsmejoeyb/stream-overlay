@@ -107,6 +107,10 @@
     <body>
         <h1>Overlay Controls</h1>
         <div class="input-group">
+            <input type="text" id="course_title" placeholder="Course Title" />
+        </div>
+        <div class="separator"></div>
+        <div class="input-group">
             <button
                 class="decrement-button"
                 onclick="updateValue('lessons_completed', -1)"
@@ -178,6 +182,10 @@
 
             async function sendAll() {
                 await send(
+                    "course_title",
+                    document.getElementById("course_title").value,
+                );
+                await send(
                     "lessons_completed",
                     document.getElementById("lessons_completed").value,
                 );
@@ -202,6 +210,8 @@
             async function loadProgress() {
                 const res = await fetch("/progress");
                 const data = await res.json();
+                document.getElementById("course_title").value =
+                    data.course_title || "";
                 document.getElementById("lessons_completed").value =
                     data.lessons_completed || "";
                 document.getElementById("lessons_total").value =

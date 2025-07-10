@@ -9,6 +9,7 @@
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
+    let courseTitle = "";
 
     const PARTICLE_COUNT = 50;
     const SPREAD = 75;
@@ -42,6 +43,7 @@
             const coursesCompleted = Number(p.courses_completed) || 0;
             const coursesTotal = Number(p.courses_total) || 0;
             const hoursStudied = Number(p.hours_studied) || 0;
+            const title = p.course_title || "";
 
             // Confetti from left and right if incremented
             if (lessonsCompleted > lastLessonsCompleted) {
@@ -56,6 +58,7 @@
             lessons = `${lessonsCompleted} / ${lessonsTotal}`;
             courses = `${coursesCompleted} / ${coursesTotal}`;
             hours = `${hoursStudied}`;
+            courseTitle = title;
 
             // Calculate days remaining based on lessons progress and hours studied
             // Assumption: Each lesson takes a certain amount of time, and we study 6 hours per day
@@ -81,6 +84,16 @@
 
 <main>
     <div class="bottom">
+        {#if courseTitle}
+            <div class="container">
+                <div
+                    class="card title-card"
+                    style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+                >
+                    {courseTitle}
+                </div>
+            </div>
+        {/if}
         <div class="container">
             <div
                 class="card"
@@ -104,7 +117,7 @@
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Estimated days left: {daysRemaining}
+                Estimated days left: ~{daysRemaining}
             </div>
         </div>
         <div class="progress-bar">
@@ -132,6 +145,14 @@
         gap: 1rem;
         flex-wrap: wrap;
     }
+    .title-card {
+        max-width: 50%;
+        margin: 0 auto;
+        text-align: center;
+        font-weight: semibold;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
     .card {
         background-blend-mode: overlay;
         background-size: cover;
@@ -142,6 +163,13 @@
         border: 1px solid #cad6e3;
         flex: 1;
         min-width: 120px;
+    }
+    .course-title {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #e7b95f;
     }
     .progress-bar {
         width: 90%;
