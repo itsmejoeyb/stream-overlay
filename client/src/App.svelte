@@ -259,7 +259,7 @@
         background-repeat: no-repeat;
         color: #cad6e3;
         padding: 1rem;
-        border: 1px solid #cad6e3;
+        border: 1px solid #635c52;
         flex: 1;
         min-width: 120px;
     }
