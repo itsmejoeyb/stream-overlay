@@ -27,6 +27,8 @@ wss.on("connection", (ws) => {
 app.use(express.json());
 
 app.post("/progress", (req, res) => {
+  console.log("Received progress request");
+
   const { key, value } = req.body;
   if (!key || value == null)
     return res.status(400).send({ error: "Missing key or value" });
@@ -38,8 +40,15 @@ app.post("/progress", (req, res) => {
 });
 
 app.post("/update", (req, res) => {
+  console.log("Received update request");
+
   const { key, delta } = req.body;
-  if (!key || delta == null) return res.status(400).send({ error: "Missing key or delta" });
+
+  console.log("Updating progress for key:", key);
+  console.log("Updating value by delta:", delta);
+
+  if (!key || delta == null)
+    return res.status(400).send({ error: "Missing key or delta" });
 
   const progress = getAllProgress();
   const current = Number(progress[key]) || 0;
