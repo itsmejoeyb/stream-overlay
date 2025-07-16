@@ -3,6 +3,7 @@
     import bg from "./assets/maptexture2.webp";
     import buttonBg from "./assets/texture_crack_base.png";
     import texture from "./assets/texture_paper.png";
+    import timerSound from "./assets/timer-end.mp3"; // Add your audio file here
 
     let lessons = "0 / 0";
     let courses = "0 / 0";
@@ -12,6 +13,7 @@
     let countdownTime = "00:00";
     let countdownSeconds = 0;
     let countdownInterval = null;
+    let timerEndSound = null;
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
@@ -21,6 +23,21 @@
     const SPREAD = 75;
 
     const socket = new WebSocket("ws://localhost:3001");
+
+    // Initialize timer end sound
+    function initializeSound() {
+        timerEndSound = new Audio(timerSound);
+        timerEndSound.volume = 0.7; // Adjust volume as needed (0.0 to 1.0)
+    }
+
+    function playTimerEndSound() {
+        if (timerEndSound) {
+            timerEndSound.currentTime = 0; // Reset to beginning
+            timerEndSound.play().catch((error) => {
+                console.log("Could not play timer end sound:", error);
+            });
+        }
+    }
 
     function confettiLeft() {
         confetti({
@@ -55,8 +72,10 @@
             if (countdownSeconds <= 0) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
+                // Trigger confetti and sound when timer reaches zero
                 confettiLeft();
                 confettiRight();
+                playTimerEndSound();
             }
         }, 1000);
     }
@@ -67,7 +86,17 @@
         countdownTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     }
 
+    // Initialize sound on first user interaction
+    let soundInitialized = false;
+    function ensureSoundInitialized() {
+        if (!soundInitialized) {
+            initializeSound();
+            soundInitialized = true;
+        }
+    }
+
     socket.onmessage = (event) => {
+        ensureSoundInitialized();
         const data = JSON.parse(event.data);
         if (data.progress) {
             const p = data.progress;
