@@ -64,6 +64,17 @@ app.get("/progress", (req, res) => {
   res.json(getAllProgress());
 });
 
+app.post("/timer", (req, res) => {
+  const { minutes } = req.body;
+  if (minutes == null)
+    return res.status(400).send({ error: "Missing minutes" });
+
+  const progress = getAllProgress();
+  progress.timer_minutes = minutes;
+  sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
+  res.send({ success: true, minutes });
+});
+
 // Admin panel
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "public/admin.html"));

@@ -9,6 +9,9 @@
     let hours = "0";
     let errors = "0";
     let daysRemaining = "Too many...";
+    let countdownTime = "00:00";
+    let countdownSeconds = 0;
+    let countdownInterval = null;
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
@@ -37,6 +40,33 @@
         });
     }
 
+    function startCountdown(minutes) {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        countdownSeconds = minutes * 60;
+        updateCountdownDisplay();
+
+        countdownInterval = setInterval(() => {
+            countdownSeconds--;
+            updateCountdownDisplay();
+
+            if (countdownSeconds <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+                confettiLeft();
+                confettiRight();
+            }
+        }, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        const minutes = Math.floor(countdownSeconds / 60);
+        const seconds = countdownSeconds % 60;
+        countdownTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    }
+
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.progress) {
@@ -48,6 +78,7 @@
             const hoursStudied = Number(p.hours_studied) || 0;
             const errorsMade = Number(p.errors_made) || 0;
             const title = p.course_title || "";
+            const timerMinutes = Number(p.timer_minutes) || 0;
 
             // Confetti from left and right if incremented
             if (lessonsCompleted > lastLessonsCompleted) {
@@ -81,6 +112,12 @@
 
             lessonsProgress =
                 lessonsTotal > 0 ? (lessonsCompleted / lessonsTotal) * 100 : 0;
+
+            // Start countdown timer if timer_minutes is provided
+            if (timerMinutes > 0 && timerMinutes !== countdownSeconds / 60) {
+                startCountdown(timerMinutes);
+            }
+
             lastLessonsCompleted = lessonsCompleted;
             lastCoursesCompleted = coursesCompleted;
         }
@@ -89,22 +126,23 @@
 
 <main>
     <div class="bottom">
-        {#if courseTitle}
-            <div class="container">
-                <div
-                    class="card title-card"
-                    style="background-image: url('{texture}'), url('{buttonBg}'), radial-gradient(
+        <div class="title-container">
+            <div class="timer-display">
+                {countdownTime}
+            </div>
+            <div
+                class="card title-card"
+                style="background-image: url('{texture}'), url('{buttonBg}'), radial-gradient(
                         88.86% 132.66% at 50% 92.32%,
                         transparent 0,
                         transparent 30%,
                         #000 100%
                     );"
-                >
-                    <span class="sub-text">Current course:</span>
-                    {courseTitle}
-                </div>
+            >
+                <span class="sub-text">Current course:</span>
+                {courseTitle}
             </div>
-        {/if}
+        </div>
         <div class="container">
             <div
                 class="card"
@@ -169,6 +207,30 @@
         gap: 1rem;
         flex-wrap: wrap;
     }
+    .title-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .timer-display {
+        background-image:
+            url("../assets/texture_paper.png"),
+            url("../assets/texture_crack_base.png"),
+            radial-gradient(
+                88.86% 132.66% at 50% 92.32%,
+                #2a1c0c 0,
+                #c18500 50%,
+                #2a1c0c 100%
+            );
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 1.5rem;
+        font-weight: bold;
+        white-space: nowrap;
+        text-shadow: 0 0 10px rgba(193, 133, 0, 0.5);
+    }
     .title-card {
         flex: 0 !important;
         white-space: nowrap;
@@ -181,7 +243,6 @@
         position: relative;
         color: #d7dee6;
         font-size: 2rem;
-        margin-bottom: 1rem;
         border: 3px solid #c18500 !important;
         background-color: #2a1c0c !important;
     }
