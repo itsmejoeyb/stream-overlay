@@ -39,9 +39,27 @@
                 align-items: center;
             }
 
-            input[type="text"] {
+            .input-container {
+                position: relative;
                 flex-grow: 1;
-                padding: 0.25rem;
+                min-width: 0;
+            }
+
+            .input-label {
+                position: absolute;
+                top: -8px;
+                left: 8px;
+                background: #1e1e1e;
+                padding: 0 4px;
+                font-size: 0.75rem;
+                color: #bbb;
+                z-index: 1;
+                transition: color 0.2s ease;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                padding: 0.25rem 0.5rem;
                 border: 1px solid #333;
                 border-radius: 4px;
                 height: 2.25rem;
@@ -49,11 +67,16 @@
                 color: white;
                 font-size: 1rem;
                 box-sizing: border-box;
-                min-width: 0; /* Allow input to shrink */
+                transition: border-color 0.2s ease;
             }
 
-            input[type="text"]::placeholder {
-                color: #bbb;
+            input[type="text"]:focus {
+                outline: none;
+                border-color: #4caf50;
+            }
+
+            input[type="text"]:focus + .input-label {
+                color: #4caf50;
             }
 
             .input-group button {
@@ -82,6 +105,14 @@
                 background-color: #b0160b;
             }
 
+            .input-group button:hover {
+                background-color: #45a049;
+            }
+
+            .input-group button:active {
+                background-color: #3e8e41;
+            }
+
             #sendAllButton {
                 width: 100%;
                 background-color: #008cba;
@@ -101,13 +132,22 @@
             #sendAllButton:active {
                 background-color: #006a8d;
             }
+
+            .separator {
+                height: 0.5rem;
+            }
         </style>
     </head>
 
     <body>
         <h1>Overlay Controls</h1>
         <div class="input-group">
-            <input type="text" id="course_title" placeholder="Course Title" />
+            <div class="input-container">
+                <input type="text" id="course_title" />
+                <label class="input-label" for="course_title"
+                    >Course Title</label
+                >
+            </div>
         </div>
         <div class="separator"></div>
         <div class="input-group">
@@ -117,15 +157,21 @@
             >
                 -1
             </button>
-            <input
-                type="text"
-                id="lessons_completed"
-                placeholder="Lessons completed"
-            />
+            <div class="input-container">
+                <input type="text" id="lessons_completed" />
+                <label class="input-label" for="lessons_completed"
+                    >Lessons Completed</label
+                >
+            </div>
             <button onclick="updateValue('lessons_completed', 1)">+1</button>
         </div>
         <div class="input-group">
-            <input type="text" id="lessons_total" placeholder="Lessons total" />
+            <div class="input-container">
+                <input type="text" id="lessons_total" />
+                <label class="input-label" for="lessons_total"
+                    >Lessons Total</label
+                >
+            </div>
         </div>
         <div class="separator"></div>
         <div class="input-group">
@@ -135,15 +181,21 @@
             >
                 -1
             </button>
-            <input
-                type="text"
-                id="courses_completed"
-                placeholder="Courses completed"
-            />
+            <div class="input-container">
+                <input type="text" id="courses_completed" />
+                <label class="input-label" for="courses_completed"
+                    >Courses Completed</label
+                >
+            </div>
             <button onclick="updateValue('courses_completed', 1)">+1</button>
         </div>
         <div class="input-group">
-            <input type="text" id="courses_total" placeholder="Courses total" />
+            <div class="input-container">
+                <input type="text" id="courses_total" />
+                <label class="input-label" for="courses_total"
+                    >Courses Total</label
+                >
+            </div>
         </div>
         <div class="separator"></div>
         <div class="input-group">
@@ -153,7 +205,12 @@
             >
                 -1
             </button>
-            <input type="text" id="hours_studied" placeholder="Hours studied" />
+            <div class="input-container">
+                <input type="text" id="hours_studied" />
+                <label class="input-label" for="hours_studied"
+                    >Hours Studied</label
+                >
+            </div>
             <button onclick="updateValue('hours_studied', 1)">+1</button>
         </div>
         <div class="separator"></div>
