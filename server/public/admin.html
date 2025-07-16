@@ -157,6 +157,17 @@
             <button onclick="updateValue('hours_studied', 1)">+1</button>
         </div>
         <div class="separator"></div>
+        <div class="input-group">
+            <button
+                class="decrement-button"
+                onclick="updateValue('errors_made', -1)"
+            >
+                -1
+            </button>
+            <input type="text" id="errors_made" placeholder="Errors made" />
+            <button onclick="updateValue('errors_made', 1)">+1</button>
+        </div>
+        <div class="separator"></div>
         <button id="sendAllButton" onclick="sendAll()">Send Progress</button>
 
         <script>
@@ -205,6 +216,10 @@
                     "hours_studied",
                     document.getElementById("hours_studied").value,
                 );
+                await send(
+                    "errors_made",
+                    document.getElementById("errors_made").value,
+                );
             }
 
             async function loadProgress() {
@@ -222,6 +237,8 @@
                     data.courses_total || "";
                 document.getElementById("hours_studied").value =
                     data.hours_studied || "";
+                document.getElementById("errors_made").value =
+                    data.errors_made || "";
             }
 
             loadProgress();

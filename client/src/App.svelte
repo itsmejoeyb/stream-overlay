@@ -7,6 +7,7 @@
     let lessons = "0 / 0";
     let courses = "0 / 0";
     let hours = "0";
+    let errors = "0";
     let daysRemaining = "Too many...";
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
@@ -45,6 +46,7 @@
             const coursesCompleted = Number(p.courses_completed) || 0;
             const coursesTotal = Number(p.courses_total) || 0;
             const hoursStudied = Number(p.hours_studied) || 0;
+            const errorsMade = Number(p.errors_made) || 0;
             const title = p.course_title || "";
 
             // Confetti from left and right if incremented
@@ -60,6 +62,7 @@
             lessons = `${lessonsCompleted} / ${lessonsTotal}`;
             courses = `${coursesCompleted} / ${coursesTotal}`;
             hours = `${hoursStudied}`;
+            errors = `${errorsMade}`;
             courseTitle = title;
 
             // Calculate days remaining based on lessons progress and hours studied
@@ -107,25 +110,31 @@
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Lessons completed: {lessons}
+                Lessons Completed: {lessons}
             </div>
             <div
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Courses completed: {courses}
+                Courses Completed: {courses}
             </div>
             <div
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Hours studied: {hours}
+                Hours Studied: {hours}
             </div>
             <div
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Estimated days left: {Number(daysRemaining) > 0
+                Errors Made: {errors}
+            </div>
+            <div
+                class="card"
+                style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
+            >
+                Estimated Days Left: {Number(daysRemaining) > 0
                     ? daysRemaining
                     : "Too many..."}
             </div>
@@ -134,7 +143,7 @@
             class="card progress-card"
             style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
         >
-            <div>Total progress:</div>
+            <div>Total Progress:</div>
             <div class="progress-bar">
                 <div class="progress" style="width: {lessonsProgress}%"></div>
             </div>
@@ -150,7 +159,6 @@
         font-family: sans-serif;
         display: flex;
         padding: 1rem;
-        /* background: #333; */
     }
     .bottom {
         align-self: flex-end;
