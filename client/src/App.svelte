@@ -22,6 +22,7 @@
     let lastCoursesCompleted = 0;
     let lessonsProgress = 0;
     let courseTitle = "";
+    let completionDate = "";
 
     const PARTICLE_COUNT = 50;
     const SPREAD = 75;
@@ -95,7 +96,7 @@
         const hours = Math.floor(displaySeconds / 3600);
         const minutes = Math.floor((displaySeconds % 3600) / 60);
         const seconds = displaySeconds % 60;
-        
+
         if (hours > 0) {
             countdownTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
         } else {
@@ -139,7 +140,7 @@
         if (!isPaused) return;
 
         isPaused = false;
-        
+
         if (isCountingUp) {
             countupInterval = setInterval(() => {
                 countupSeconds++;
@@ -182,13 +183,12 @@
     let soundInitialized = false;
     function ensureSoundInitialized() {
         if (!soundInitialized) {
-        try{
-
-            initializeSound();
-            soundInitialized = true;
-        } catch(e) {
-          console.log('Sound file missing', e)
-        }
+            try {
+                initializeSound();
+                soundInitialized = true;
+            } catch (e) {
+                console.log("Sound file missing", e);
+            }
         }
     }
 
@@ -236,7 +236,15 @@
             }
 
             daysRemaining = `${estimatedDays}`;
+            const date = new Date();
+            const futureDate = new Date(date);
 
+            futureDate.setDate(date.getDate() + estimatedDays);
+            completionDate = futureDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
             lessonsProgress =
                 lessonsTotal > 0 ? (lessonsCompleted / lessonsTotal) * 100 : 0;
 
@@ -249,7 +257,10 @@
                 pauseTimer();
             } else if (timerMode === "resume") {
                 resumeTimer();
-            } else if (timerMinutes > 0 && timerMinutes !== countdownSeconds / 60) {
+            } else if (
+                timerMinutes > 0 &&
+                timerMinutes !== countdownSeconds / 60
+            ) {
                 startCountdown(timerMinutes);
             }
 
@@ -307,9 +318,7 @@
                 class="card"
                 style="background-image: url('{bg}'), linear-gradient(#121620, #181b26);"
             >
-                Estimated Days Left: {Number(daysRemaining) > 0
-                    ? daysRemaining
-                    : "Too many..."}
+                Estimated Completion: {completionDate}
             </div>
         </div>
         <div
