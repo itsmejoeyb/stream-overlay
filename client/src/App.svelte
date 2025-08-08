@@ -241,8 +241,7 @@
 
             futureDate.setDate(date.getDate() + estimatedDays);
             completionDate = futureDate.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
+                month: "short",
                 day: "numeric",
             });
             lessonsProgress =
