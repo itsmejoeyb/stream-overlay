@@ -13,6 +13,10 @@
     let countdownTime = "00:00";
     let countdownSeconds = 0;
     let countdownInterval = null;
+    let countupSeconds = 0;
+    let countupInterval = null;
+    let isCountingUp = false;
+    let isPaused = false;
     let timerEndSound = null;
     let lastLessonsCompleted = 0;
     let lastCoursesCompleted = 0;
@@ -58,10 +62,16 @@
     }
 
     function startCountdown(minutes) {
+        // Clear any existing timers
         if (countdownInterval) {
             clearInterval(countdownInterval);
         }
+        if (countupInterval) {
+            clearInterval(countupInterval);
+            countupInterval = null;
+        }
 
+        isCountingUp = false;
         countdownSeconds = minutes * 60;
         updateCountdownDisplay();
 
@@ -81,17 +91,104 @@
     }
 
     function updateCountdownDisplay() {
-        const minutes = Math.floor(countdownSeconds / 60);
-        const seconds = countdownSeconds % 60;
-        countdownTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        const displaySeconds = isCountingUp ? countupSeconds : countdownSeconds;
+        const hours = Math.floor(displaySeconds / 3600);
+        const minutes = Math.floor((displaySeconds % 3600) / 60);
+        const seconds = displaySeconds % 60;
+        
+        if (hours > 0) {
+            countdownTime = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        } else {
+            countdownTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        }
+    }
+
+    function startCountup() {
+        // Clear any existing timers
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        if (countupInterval) {
+            clearInterval(countupInterval);
+        }
+
+        isCountingUp = true;
+        countupSeconds = 0;
+        updateCountdownDisplay();
+
+        countupInterval = setInterval(() => {
+            countupSeconds++;
+            updateCountdownDisplay();
+        }, 1000);
+    }
+
+    function pauseTimer() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        if (countupInterval) {
+            clearInterval(countupInterval);
+            countupInterval = null;
+        }
+        isPaused = true;
+    }
+
+    function resumeTimer() {
+        if (!isPaused) return;
+
+        isPaused = false;
+        
+        if (isCountingUp) {
+            countupInterval = setInterval(() => {
+                countupSeconds++;
+                updateCountdownDisplay();
+            }, 1000);
+        } else if (countdownSeconds > 0) {
+            countdownInterval = setInterval(() => {
+                countdownSeconds--;
+                updateCountdownDisplay();
+
+                if (countdownSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    // Trigger confetti and sound when timer reaches zero
+                    confettiLeft();
+                    confettiRight();
+                    playTimerEndSound();
+                }
+            }, 1000);
+        }
+    }
+
+    function stopTimer() {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
+        if (countupInterval) {
+            clearInterval(countupInterval);
+            countupInterval = null;
+        }
+        isCountingUp = false;
+        isPaused = false;
+        countdownTime = "00:00";
+        countdownSeconds = 0;
+        countupSeconds = 0;
     }
 
     // Initialize sound on first user interaction
     let soundInitialized = false;
     function ensureSoundInitialized() {
         if (!soundInitialized) {
+        try{
+
             initializeSound();
             soundInitialized = true;
+        } catch(e) {
+          console.log('Sound file missing', e)
+        }
         }
     }
 
@@ -108,6 +205,7 @@
             const errorsMade = Number(p.errors_made) || 0;
             const title = p.course_title || "";
             const timerMinutes = Number(p.timer_minutes) || 0;
+            const timerMode = p.timer_mode || "countdown";
 
             // Confetti from left and right if incremented
             if (lessonsCompleted > lastLessonsCompleted) {
@@ -142,8 +240,16 @@
             lessonsProgress =
                 lessonsTotal > 0 ? (lessonsCompleted / lessonsTotal) * 100 : 0;
 
-            // Start countdown timer if timer_minutes is provided
-            if (timerMinutes > 0 && timerMinutes !== countdownSeconds / 60) {
+            // Handle timer based on mode
+            if (timerMode === "countup") {
+                startCountup();
+            } else if (timerMode === "stop") {
+                stopTimer();
+            } else if (timerMode === "pause") {
+                pauseTimer();
+            } else if (timerMode === "resume") {
+                resumeTimer();
+            } else if (timerMinutes > 0 && timerMinutes !== countdownSeconds / 60) {
                 startCountdown(timerMinutes);
             }
 
