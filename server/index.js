@@ -71,8 +71,37 @@ app.post("/timer", (req, res) => {
 
   const progress = getAllProgress();
   progress.timer_minutes = minutes;
+  progress.timer_mode = "countdown";
   sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
   res.send({ success: true, minutes });
+});
+
+app.post("/timer/countup", (req, res) => {
+  const progress = getAllProgress();
+  progress.timer_mode = "countup";
+  sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
+  res.send({ success: true, mode: "countup" });
+});
+
+app.post("/timer/stop", (req, res) => {
+  const progress = getAllProgress();
+  progress.timer_mode = "stop";
+  sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
+  res.send({ success: true, mode: "stop" });
+});
+
+app.post("/timer/pause", (req, res) => {
+  const progress = getAllProgress();
+  progress.timer_mode = "pause";
+  sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
+  res.send({ success: true, mode: "pause" });
+});
+
+app.post("/timer/resume", (req, res) => {
+  const progress = getAllProgress();
+  progress.timer_mode = "resume";
+  sockets.forEach((ws) => ws.send(JSON.stringify({ progress })));
+  res.send({ success: true, mode: "resume" });
 });
 
 // Admin panel
