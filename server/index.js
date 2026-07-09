@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+const port = process.env.PORT || 3001;
 
 let sockets = [];
 
@@ -112,6 +113,6 @@ app.get("/admin", (req, res) => {
 // Serve overlay
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-server.listen(3001, () => {
-  console.log("Server running at http://localhost:3001");
+server.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });

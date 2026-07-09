@@ -1,0 +1,14 @@
+services:
+  stream-overlay:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DATABASE_PATH: /data/overlay.db
+    volumes:
+      - overlay-data:/data
+    restart: unless-stopped
+
+volumes:
+  overlay-data:

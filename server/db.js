@@ -1,6 +1,15 @@
 import Database from "better-sqlite3";
+import fs from "fs";
+import path from "path";
 
-const db = new Database("overlay.db");
+const databasePath = process.env.DATABASE_PATH || "overlay.db";
+const databaseDirectory = path.dirname(databasePath);
+
+if (databaseDirectory !== ".") {
+  fs.mkdirSync(databaseDirectory, { recursive: true });
+}
+
+const db = new Database(databasePath);
 
 db.prepare(
   `

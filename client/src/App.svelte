@@ -3,7 +3,7 @@
     import bg from "./assets/maptexture2.webp";
     import buttonBg from "./assets/texture_crack_base.png";
     import texture from "./assets/texture_paper.png";
-    import timerSound from "./assets/timer-end.mp3"; // Add your audio file here
+    const timerSound = "/timer-end.mp3";
 
     let lessons = "0 / 0";
     let courses = "0 / 0";
@@ -27,7 +27,8 @@
     const PARTICLE_COUNT = 50;
     const SPREAD = 75;
 
-    const socket = new WebSocket("ws://localhost:3001");
+    const socketProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const socket = new WebSocket(`${socketProtocol}//${window.location.host}`);
 
     // Initialize timer end sound
     function initializeSound() {
@@ -272,7 +273,15 @@
 <main>
     <div class="bottom">
         <div class="title-container">
-            <div class="timer-display">
+            <div
+                class="timer-display"
+                style="background-image: url('{texture}'), url('{buttonBg}'), radial-gradient(
+                        88.86% 132.66% at 50% 92.32%,
+                        #2a1c0c 0,
+                        #c18500 50%,
+                        #2a1c0c 100%
+                    );"
+            >
                 {countdownTime}
             </div>
             <div
@@ -357,15 +366,6 @@
         margin-bottom: 1rem;
     }
     .timer-display {
-        background-image:
-            url("../assets/texture_paper.png"),
-            url("../assets/texture_crack_base.png"),
-            radial-gradient(
-                88.86% 132.66% at 50% 92.32%,
-                #2a1c0c 0,
-                #c18500 50%,
-                #2a1c0c 100%
-            );
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
